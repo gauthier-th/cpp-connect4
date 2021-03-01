@@ -1,0 +1,6 @@
+﻿  main.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 4 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  connect4.vcxproj -> C:\Users\Tom\Documents\GitHub\cpp-connect4\x64\Release\connect4.exe
