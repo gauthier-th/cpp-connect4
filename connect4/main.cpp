@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Connect4.h";
+#include "Connect4.h"
+#include "Menu.h"
 
 int main()
 {
@@ -22,7 +23,7 @@ int main()
         window.display();
     }*/
 
-    Connect4* p4 = new Connect4();
+    /*Connect4* p4 = new Connect4();
 
     while (true) {
         system("cls");
@@ -51,7 +52,10 @@ int main()
             break;
         }
         p4->next();
-    }
+    }*/
+
+    Menu* menu = new Menu();
+    menu->afficher();
 
     return 0;
 }
