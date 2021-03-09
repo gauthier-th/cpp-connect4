@@ -38,6 +38,14 @@ void Menu::afficher()
         {
             if (event.type == sf::Event::Closed)
                 window->close();
+            if (event.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
+                buttonJoin.hover(localPosition);
+                buttonCreate.hover(localPosition);
+                buttonCredits.hover(localPosition);
+                buttonOptions.hover(localPosition);
+            }
         }
 
         window->clear();

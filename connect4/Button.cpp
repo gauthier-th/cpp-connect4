@@ -2,7 +2,10 @@
 
 void Button::updateProperties()
 {
-	this->rectangleShape->setFillColor(this->backgroundColor);
+	if (this->isHover)
+		this->rectangleShape->setFillColor(this->hoverBackgroundColor);
+	else
+		this->rectangleShape->setFillColor(this->defaultBackgroundColor);
 	this->rectangleShape->setPosition(this->position);
 	this->rectangleShape->setSize(this->size);
 	this->textShape->setString(this->textContent);
@@ -11,10 +14,11 @@ void Button::updateProperties()
 	this->textShape->setCharacterSize(24);
 }
 
-Button::Button(sf::Font _font, std::string _textContent, sf::Color _backgroundColor, sf::Vector2f _position, sf::Vector2f _size, sf::Color _textColor)
+Button::Button(sf::Font _font, std::string _textContent, sf::Color _defaultBackgroundColor, sf::Color _hoverBackgroundColor, sf::Vector2f _position, sf::Vector2f _size, sf::Color _textColor)
 {
 	this->textContent = _textContent;
-	this->backgroundColor = _backgroundColor;
+	this->defaultBackgroundColor = _defaultBackgroundColor;
+	this->hoverBackgroundColor = _hoverBackgroundColor;
 	this->font = _font;
 	this->position = _position;
 	this->size = _size;
@@ -44,9 +48,9 @@ void Button::setTextContent(std::string _textContent)
 	this->textContent = _textContent;
 	this->updateProperties();
 }
-void Button::setBackgroundColor(sf::Color _backgroundColor)
+void Button::setBackgroundColor(sf::Color _defaultBackgroundColor)
 {
-	this->backgroundColor = _backgroundColor;
+	this->defaultBackgroundColor = _defaultBackgroundColor;
 	this->updateProperties();
 }
 void Button::setTextColor(sf::Color _textColor)
@@ -84,6 +88,20 @@ void Button::draw(sf::RenderWindow* window)
 	sf::FloatRect textRect = this->textShape->getLocalBounds();
 	this->textShape->setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 	this->textShape->setPosition(sf::Vector2f(this->position.x + this->size.x / 2, this->position.y + this->size.y / 2));
+
+	if (this->isHover)
+		this->rectangleShape->setFillColor(this->hoverBackgroundColor);
+	else
+		this->rectangleShape->setFillColor(this->defaultBackgroundColor);
+
 	window->draw(*this->rectangleShape);
 	window->draw(*this->textShape);
+}
+
+void Button::hover(sf::Vector2i localPosition)
+{
+	if (localPosition.x >= this->position.x && localPosition.x <= this->position.x + this->size.x && localPosition.y >= this->position.y && localPosition.y <= this->position.y + this->size.y)
+		this->isHover = true;
+	else
+		this->isHover = false;
 }
