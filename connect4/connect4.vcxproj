@@ -168,6 +168,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Connect4.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -175,6 +177,8 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Connect4.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
