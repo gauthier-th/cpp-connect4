@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Menu.h"
 #include "Button.h"
+#include "Game.h"
 
 void Menu::afficher()
 {
@@ -50,6 +51,17 @@ void Menu::afficher()
                     window->setMouseCursor(handCursor);
                 else
                     window->setMouseCursor(defaultCursor);
+            }
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
+                if (buttonJoin.hover(localPosition))
+                {
+                    window->setVisible(false);
+                    Game* game = new Game();
+                    game->display();
+                    window->setVisible(true);
+                }
             }
         }
 

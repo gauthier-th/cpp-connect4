@@ -35,12 +35,10 @@ void Game::display()
                     bool win = this->connect4->addToken(col);
 
                     if (win) {
-                        std::cout << "Player " << this->connect4->getPlayer() << " won!" << std::endl;
                         endType = this->connect4->getPlayer();
                         this->grid->hideHover();
                     }
                     else if (this->connect4->gridFilled()) {
-                        std::cout << "Equality! The grid is full. " << std::endl;
                         endType = 3;
                         this->grid->hideHover();
                     }

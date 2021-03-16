@@ -6,9 +6,6 @@
 
 int main()
 {
-    /*Game* game = new Game();
-    game->display();*/
-
     Menu menu = Menu();
     menu.afficher();
 
