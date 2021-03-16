@@ -6,8 +6,11 @@
 
 int main()
 {
-    Game* game = new Game();
-    game->display();
+    /*Game* game = new Game();
+    game->display();*/
+
+    Menu menu = Menu();
+    menu.afficher();
 
     return 0;
 }

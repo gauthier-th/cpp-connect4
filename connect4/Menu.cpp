@@ -8,11 +8,14 @@ void Menu::afficher()
     settings.antialiasingLevel = 4;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 
+    sf::Cursor defaultCursor;
+    sf::Cursor handCursor;
+    if (!defaultCursor.loadFromSystem(sf::Cursor::Arrow) || !handCursor.loadFromSystem(sf::Cursor::Hand))
+        std::cout << "Unable to load cursor." << std::endl;
+
     sf::Font font;
     if (!font.loadFromFile("resources/Lato-Regular.ttf"))
-    {
         std::cout << "Unable to load font file" << std::endl;
-    }
 
     sf::RectangleShape background(sf::Vector2f(650.f, 650.f));
     background.setFillColor(sf::Color(0x0089E3FF));
@@ -22,14 +25,16 @@ void Menu::afficher()
 
     Button buttonCreate = Button(font, "Create a game");
     buttonCreate.setPosition(sf::Vector2f(220.f, 240.f));
-    buttonCreate.setBackgroundColor(sf::Color(0xFBBE2EFF));
+    buttonCreate.setDefaultBackgroundColor(sf::Color(0xFBBE2EFF));
+    buttonCreate.setHoverBackgroundColor(sf::Color(0xFBBE2ECF));
 
     Button buttonCredits = Button(font, "Credits");
     buttonCredits.setPosition(sf::Vector2f(220.f, 370.f));
 
     Button buttonOptions = Button(font, "Options");
     buttonOptions.setPosition(sf::Vector2f(220.f, 500.f));
-    buttonOptions.setBackgroundColor(sf::Color(0xFBBE2EFF));
+    buttonOptions.setDefaultBackgroundColor(sf::Color(0xFBBE2EFF));
+    buttonOptions.setHoverBackgroundColor(sf::Color(0xFBBE2ECF));
 
     while (window->isOpen())
     {
@@ -41,10 +46,10 @@ void Menu::afficher()
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
-                buttonJoin.hover(localPosition);
-                buttonCreate.hover(localPosition);
-                buttonCredits.hover(localPosition);
-                buttonOptions.hover(localPosition);
+                if (buttonJoin.hover(localPosition) || buttonCreate.hover(localPosition) || buttonCredits.hover(localPosition) || buttonOptions.hover(localPosition))
+                    window->setMouseCursor(handCursor);
+                else
+                    window->setMouseCursor(defaultCursor);
             }
         }
 

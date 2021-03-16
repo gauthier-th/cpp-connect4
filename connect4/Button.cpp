@@ -48,9 +48,14 @@ void Button::setTextContent(std::string _textContent)
 	this->textContent = _textContent;
 	this->updateProperties();
 }
-void Button::setBackgroundColor(sf::Color _defaultBackgroundColor)
+void Button::setDefaultBackgroundColor(sf::Color _defaultBackgroundColor)
 {
 	this->defaultBackgroundColor = _defaultBackgroundColor;
+	this->updateProperties();
+}
+void Button::setHoverBackgroundColor(sf::Color _hoverBackgroundColor)
+{
+	this->hoverBackgroundColor = _hoverBackgroundColor;
 	this->updateProperties();
 }
 void Button::setTextColor(sf::Color _textColor)
@@ -98,10 +103,11 @@ void Button::draw(sf::RenderWindow* window)
 	window->draw(*this->textShape);
 }
 
-void Button::hover(sf::Vector2i localPosition)
+bool Button::hover(sf::Vector2i localPosition)
 {
 	if (localPosition.x >= this->position.x && localPosition.x <= this->position.x + this->size.x && localPosition.y >= this->position.y && localPosition.y <= this->position.y + this->size.y)
 		this->isHover = true;
 	else
 		this->isHover = false;
+	return this->isHover;
 }
