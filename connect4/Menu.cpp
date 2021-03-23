@@ -2,6 +2,8 @@
 #include "Menu.h"
 #include "Button.h"
 #include "Game.h"
+#include "Credits.h"
+#include "Options.h"
 
 void Menu::afficher()
 {
@@ -60,6 +62,20 @@ void Menu::afficher()
                     window->setVisible(false);
                     Game* game = new Game();
                     game->display();
+                    window->setVisible(true);
+                }
+                if (buttonCredits.hover(localPosition))
+                {
+                    window->setVisible(false);
+                    Credits* credits = new Credits();
+                    credits->display();
+                    window->setVisible(true);
+                }
+                if (buttonOptions.hover(localPosition))
+                {
+                    window->setVisible(false);
+                    Options* options = new Options();
+                    options->display();
                     window->setVisible(true);
                 }
             }
