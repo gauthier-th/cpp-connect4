@@ -9,12 +9,13 @@ private:
 	bool isActive = false;
 	sf::RectangleShape* rectangleShape;
 	sf::Text* textShape;
+	sf::RectangleShape* cursorShape;
 	std::string textContent = "";
 	sf::Color defaultBackgroundColor = sf::Color(0xDDDDDDFF);
 	sf::Color hoverBackgroundColor = sf::Color(0xBBBBBBFF);
 	sf::Color textColor = sf::Color::Black;
 	sf::Font font;
-	sf::Vector2f size = sf::Vector2f(210.f, 50.f);
+	sf::Vector2f size = sf::Vector2f(270.f, 50.f);
 	sf::Vector2f position = sf::Vector2f(0.f, 0.f);
 	sf::Cursor defaultCursor;
 	sf::Cursor textCursor;

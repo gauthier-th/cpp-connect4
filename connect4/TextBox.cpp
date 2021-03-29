@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 #include "TextBox.h"
 #include "Button.h"
 
@@ -6,6 +7,7 @@ TextBox::TextBox(sf::Font _font)
 {
 	this->font = _font;
 	this->rectangleShape = new sf::RectangleShape(this->size);
+	this->cursorShape = new sf::RectangleShape();
 	this->textShape = new sf::Text();
 
 	if (!this->defaultCursor.loadFromSystem(sf::Cursor::Arrow) || !this->textCursor.loadFromSystem(sf::Cursor::Text))
@@ -26,6 +28,7 @@ void TextBox::updateProperties()
 	this->textShape->setFont(this->font);
 	this->textShape->setFillColor(this->textColor);
 	this->textShape->setCharacterSize(24);
+	this->cursorShape->setFillColor(this->textColor);
 }
 
 void TextBox::draw(sf::RenderWindow* window)
@@ -39,8 +42,21 @@ void TextBox::draw(sf::RenderWindow* window)
 	else
 		this->rectangleShape->setFillColor(this->defaultBackgroundColor);
 
+	if (this->isActive) {
+		this->cursorShape->setSize(sf::Vector2f(2.f, this->size.y / 1.8f));
+		if (this->textContent.length() == 0)
+			this->cursorShape->setPosition(sf::Vector2f(this->textShape->getPosition().x + this->textShape->getLocalBounds().width / 2 + 4.f, this->position.y + 12.f));
+		else
+			this->cursorShape->setPosition(sf::Vector2f(this->textShape->getPosition().x + this->textShape->getLocalBounds().width / 2 + 4.f, this->position.y + 12.f));
+	}
+
 	window->draw(*this->rectangleShape);
 	window->draw(*this->textShape);
+	if (this->isActive) {
+		const auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		if (timestamp % 1000 < 500)
+			window->draw(*this->cursorShape);
+	}
 }
 
 bool TextBox::hover(sf::Vector2i localPosition, sf::RenderWindow* window)
@@ -61,11 +77,14 @@ bool TextBox::hover(sf::Vector2i localPosition, sf::RenderWindow* window)
 void TextBox::focus()
 {
 	this->isActive = true;
+	this->rectangleShape->setOutlineThickness(2.f);
+	this->rectangleShape->setOutlineColor(sf::Color(0, 0, 0));
 }
 
 void TextBox::blur()
 {
 	this->isActive = false;
+	this->rectangleShape->setOutlineThickness(0.f);
 }
 
 void TextBox::text(sf::String _text)

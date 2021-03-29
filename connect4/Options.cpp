@@ -16,7 +16,7 @@ void Options::display()
     background.setFillColor(sf::Color(0x0089E3FF));
 
     TextBox* textbox = new TextBox(font);
-    textbox->setPosition(sf::Vector2f(220.f, 110.f));
+    textbox->setPosition(sf::Vector2f(190.f, 110.f));
 
     while (window->isOpen())
     {
