@@ -3,3 +3,4 @@ connect4/x64/Debug/*
 x64/Debug/*
 .vs/cpp-connect4/v16
 SFML-2.5.1/*
+connect4/connect4.conf
