@@ -27,7 +27,7 @@ void TextBox::updateProperties()
 	this->textShape->setString(this->textContent);
 	this->textShape->setFont(this->font);
 	this->textShape->setFillColor(this->textColor);
-	this->textShape->setCharacterSize(24);
+	this->textShape->setCharacterSize(this->characterSize);
 	this->cursorShape->setFillColor(this->textColor);
 }
 
@@ -136,5 +136,11 @@ void TextBox::setSize(sf::Vector2f _size)
 void TextBox::setPosition(sf::Vector2f _position)
 {
 	this->position = _position;
+	this->updateProperties();
+}
+
+void TextBox::setCharacterSize(int _characterSize)
+{
+	this->characterSize = _characterSize;
 	this->updateProperties();
 }

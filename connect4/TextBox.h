@@ -19,6 +19,7 @@ private:
 	sf::Vector2f position = sf::Vector2f(0.f, 0.f);
 	sf::Cursor defaultCursor;
 	sf::Cursor textCursor;
+	int characterSize;
 	void updateProperties();
 public:
 	TextBox(sf::Font _font);
@@ -34,4 +35,5 @@ public:
 	void setFont(sf::Font _font);
 	void setSize(sf::Vector2f _size);
 	void setPosition(sf::Vector2f _position);
+	void setCharacterSize(int _characterSize);
 };

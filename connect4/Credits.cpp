@@ -6,7 +6,7 @@ void Credits::display()
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Crédits", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 
     sf::Font font;
     if (!font.loadFromFile("resources/Lato-Regular.ttf"))

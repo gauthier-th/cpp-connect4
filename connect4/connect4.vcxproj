@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Connect4.h" />
     <ClInclude Include="Credits.h" />
     <ClInclude Include="Game.h" />
