@@ -14,6 +14,8 @@ Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4)
 	{
 		std::cout << "Unable to load font file" << std::endl;
 	}
+
+	this->quitButton = new Button(this->font, "Back");
 }
 
 void Grid::draw()
@@ -58,10 +60,14 @@ void Grid::draw()
 	}
 }
 
-void Grid::hover(sf::Vector2i localPosition)
+void Grid::hover(sf::Vector2i localPosition, int endType)
 {
-	int col = (localPosition.x - localPosition.x % 105) / 105;
-	this->hoverColumn = col;
+	if (endType == 0) {
+		int col = (localPosition.x - localPosition.x % 105) / 105;
+		this->hoverColumn = col;
+	}
+	else
+		this->quitButton->hover(localPosition);
 }
 void Grid::hideHover()
 {
@@ -78,12 +84,12 @@ int Grid::clickedColumnlocalPosition(sf::Vector2i localPosition)
 void Grid::displayMessage(std::string message, sf::Color color)
 {
 	int posX = 105 * 2;
-	int posY = 105 * 2;
+	int posY = 105 * 2.5;
 
 	sf::Text* textShape = new sf::Text();
 	sf::RectangleShape* rectangleShape = new sf::RectangleShape();
 
-	textShape->setPosition(sf::Vector2f(posX + (105 * 3) / 2, posY + 105));
+	textShape->setPosition(sf::Vector2f(posX + (105 * 3) / 2, posY));
 	textShape->setString(message);
 	textShape->setFont(this->font);
 	textShape->setCharacterSize(50);
@@ -95,6 +101,14 @@ void Grid::displayMessage(std::string message, sf::Color color)
 	rectangleShape->setPosition(sf::Vector2f(105 * 1, 105 * 2));
 	rectangleShape->setSize(sf::Vector2f(105 * 5, 105 * 2));
 
+	this->quitButton->setPosition(sf::Vector2f(posX + 105 / 2, posY + 105 / 2 + 10));
+
 	this->window->draw(*rectangleShape);
 	this->window->draw(*textShape);
+	this->quitButton->draw(this->window);
+}
+
+bool Grid::quit(sf::Vector2i localPosition, int endType)
+{
+	return this->quitButton->hover(localPosition) && endType != 0;
 }

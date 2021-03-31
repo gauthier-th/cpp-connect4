@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Game.h"
+#include "Button.h"
 
 Game::Game()
 {
@@ -20,30 +21,34 @@ void Game::display()
         {
             if (event.type == sf::Event::Closed)
                 window->close();
-            if (event.type == sf::Event::MouseMoved && endType == 0)
+            if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
-                this->grid->hover(localPosition);
+                this->grid->hover(localPosition, endType);
             }
-            if (event.type == sf::Event::MouseButtonPressed && endType == 0)
+            if (event.type == sf::Event::MouseButtonPressed)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
-                int col = this->grid->clickedColumnlocalPosition(localPosition);
+                if (this->grid->quit(localPosition, endType) && endType != 0)
+                    window->close();
+                else if (endType == 0) {
+                    int col = this->grid->clickedColumnlocalPosition(localPosition);
 
-                if (col >= 0 && col < Connect4::SIZE_X && !this->connect4->columnFilled(col))
-                {
-                    bool win = this->connect4->addToken(col);
+                    if (col >= 0 && col < Connect4::SIZE_X && !this->connect4->columnFilled(col))
+                    {
+                        bool win = this->connect4->addToken(col);
 
-                    if (win) {
-                        endType = this->connect4->getPlayer();
-                        this->grid->hideHover();
+                        if (win) {
+                            endType = this->connect4->getPlayer();
+                            this->grid->hideHover();
+                        }
+                        else if (this->connect4->gridFilled()) {
+                            endType = 3;
+                            this->grid->hideHover();
+                        }
+
+                        this->connect4->next();
                     }
-                    else if (this->connect4->gridFilled()) {
-                        endType = 3;
-                        this->grid->hideHover();
-                    }
-
-                    this->connect4->next();
                 }
             }
         }

@@ -1,11 +1,15 @@
 #include <iostream>
 #include "Options.h"
 #include "TextBox.h"
+#include "Button.h"
+#include "Config.h"
 
 void Options::display()
 {
+    Config config = Config();
+    config.load();
+
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 4;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Options", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 
     sf::Font font;
@@ -26,6 +30,7 @@ void Options::display()
     TextBox* textboxUsername = new TextBox(font);
     textboxUsername->setPosition(sf::Vector2f(190.f, 120.f));
     textboxUsername->setCharacterSize(24);
+    textboxUsername->setTextContent(config.getUsername());
 
     sf::Text textIp = sf::Text();
     textIp.setString("Serveur");
@@ -38,6 +43,16 @@ void Options::display()
     TextBox* textboxIp = new TextBox(font);
     textboxIp->setPosition(sf::Vector2f(190.f, 250.f));
     textboxIp->setCharacterSize(24);
+    textboxIp->setTextContent(config.getServerIp());
+
+    Button* saveButton = new Button(font, "Save");
+    saveButton->setDefaultBackgroundColor(sf::Color(26, 196, 77));
+    saveButton->setHoverBackgroundColor(sf::Color(59, 235, 111));
+    saveButton->setPosition(sf::Vector2f(650 / 2 - 210 / 2, 350.f));
+
+    Button* quitButton = new Button(font, "Back");
+    quitButton->setSize(sf::Vector2f(150.f, 30.f));
+    quitButton->setPosition(sf::Vector2f(650 - 150, 650 - 30));
 
     while (window->isOpen())
     {
@@ -51,6 +66,8 @@ void Options::display()
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
                 textboxUsername->hover(localPosition, window);
                 textboxIp->hover(localPosition, window);
+                quitButton->hover(localPosition);
+                saveButton->hover(localPosition);
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
@@ -63,6 +80,14 @@ void Options::display()
                     textboxIp->focus();
                 else
                     textboxIp->blur();
+                if (saveButton->hover(localPosition)) {
+                    config.setUsername(textboxUsername->getTextContent());
+                    config.setServerIp(textboxIp->getTextContent());
+                    config.save();
+                    window->close();
+                }
+                if (quitButton->hover(localPosition))
+                    window->close();
             }
             if (event.type == sf::Event::TextEntered)
             {
@@ -77,6 +102,8 @@ void Options::display()
         window->draw(textIp);
         textboxUsername->draw(window);
         textboxIp->draw(window);
+        saveButton->draw(window);
+        quitButton->draw(window);
         window->display();
     }
 }

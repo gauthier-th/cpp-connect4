@@ -144,3 +144,7 @@ void TextBox::setCharacterSize(int _characterSize)
 	this->characterSize = _characterSize;
 	this->updateProperties();
 }
+
+std::string TextBox::getTextContent() {
+	return this->textContent;
+}

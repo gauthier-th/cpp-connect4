@@ -36,4 +36,5 @@ public:
 	void setSize(sf::Vector2f _size);
 	void setPosition(sf::Vector2f _position);
 	void setCharacterSize(int _characterSize);
+	std::string getTextContent();
 };
