@@ -20,7 +20,7 @@ void Options::display()
     background.setFillColor(sf::Color(0x0089E3FF));
 
     sf::Text textUsername = sf::Text();
-    textUsername.setString("Pseudo");
+    textUsername.setString("Username");
     textUsername.setFont(font);
     textUsername.setCharacterSize(24);
     sf::FloatRect textRectUsername = textUsername.getLocalBounds();
@@ -33,7 +33,7 @@ void Options::display()
     textboxUsername->setTextContent(config.getUsername());
 
     sf::Text textIp = sf::Text();
-    textIp.setString("Serveur");
+    textIp.setString("Server");
     textIp.setFont(font);
     textIp.setCharacterSize(24);
     sf::FloatRect textRectIp = textIp.getLocalBounds();

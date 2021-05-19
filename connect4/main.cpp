@@ -1,13 +1,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Connect4.h"
 #include "Menu.h"
-#include "Game.h"
+#include "WebSocket.h"
 
 int main()
 {
-    Menu menu = Menu();
-    menu.afficher();
+    //Menu menu = Menu();
+    //menu.afficher();
+    WebSocket websocket = WebSocket();
+    websocket.test();
 
     return 0;
 }

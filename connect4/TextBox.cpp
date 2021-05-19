@@ -34,7 +34,7 @@ void TextBox::updateProperties()
 void TextBox::draw(sf::RenderWindow* window)
 {
 	sf::FloatRect textRect = this->textShape->getLocalBounds();
-	this->textShape->setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	this->textShape->setOrigin(textRect.left + textRect.width / 2.0f, this->size.y / 3.5);
 	this->textShape->setPosition(sf::Vector2f(this->position.x + this->size.x / 2, this->position.y + this->size.y / 2));
 
 	if (this->isHover)
