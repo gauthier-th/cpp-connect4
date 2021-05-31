@@ -1,12 +1,15 @@
 #include "WebSocket.h";
 
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include <boost/asio/connect.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <cstdlib>
-#include <iostream>
-#include <string>
+
+#include "json.hpp"
 
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
@@ -14,8 +17,10 @@ namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+using nlohmann::json;
 
 void WebSocket::test() {
+
     try
     {
         std::string host = "localhost";
@@ -44,9 +49,7 @@ void WebSocket::test() {
         ws.set_option(websocket::stream_base::decorator(
             [](websocket::request_type& req)
             {
-                req.set(http::field::user_agent,
-                    std::string(BOOST_BEAST_VERSION_STRING) +
-                    " websocket-client-coro");
+                req.set(http::field::user_agent, std::string(BOOST_BEAST_VERSION_STRING) + " websocket-client-coro");
             }));
 
         // Perform the websocket handshake
