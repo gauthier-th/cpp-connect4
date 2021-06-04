@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Credits.h"
 #include "Options.h"
+#include "Multiplayer.h"
 
 void Menu::afficher()
 {
@@ -23,13 +24,13 @@ void Menu::afficher()
     sf::RectangleShape background(sf::Vector2f(650.f, 650.f));
     background.setFillColor(sf::Color(0x0089E3FF));
 
-    Button buttonJoin = Button(font, "Join a game");
+    Button buttonJoin = Button(font, "Local");
     buttonJoin.setPosition(sf::Vector2f(220.f, 110.f));
 
-    Button buttonCreate = Button(font, "Create a game");
-    buttonCreate.setPosition(sf::Vector2f(220.f, 240.f));
-    buttonCreate.setDefaultBackgroundColor(sf::Color(0xFBBE2EFF));
-    buttonCreate.setHoverBackgroundColor(sf::Color(0xFBBE2ECF));
+    Button buttonMultiplayer = Button(font, "Multiplayer");
+    buttonMultiplayer.setPosition(sf::Vector2f(220.f, 240.f));
+    buttonMultiplayer.setDefaultBackgroundColor(sf::Color(0xFBBE2EFF));
+    buttonMultiplayer.setHoverBackgroundColor(sf::Color(0xFBBE2ECF));
 
     Button buttonCredits = Button(font, "Credits");
     buttonCredits.setPosition(sf::Vector2f(220.f, 370.f));
@@ -49,7 +50,7 @@ void Menu::afficher()
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
-                if (buttonJoin.hover(localPosition) || buttonCreate.hover(localPosition) || buttonCredits.hover(localPosition) || buttonOptions.hover(localPosition))
+                if (buttonJoin.hover(localPosition) || buttonMultiplayer.hover(localPosition) || buttonCredits.hover(localPosition) || buttonOptions.hover(localPosition))
                     window->setMouseCursor(handCursor);
                 else
                     window->setMouseCursor(defaultCursor);
@@ -62,6 +63,13 @@ void Menu::afficher()
                     window->setVisible(false);
                     Game* game = new Game();
                     game->display();
+                    window->setVisible(true);
+                }
+                if (buttonMultiplayer.hover(localPosition))
+                {
+                    window->setVisible(false);
+                    Multiplayer* multiplayer = new Multiplayer();
+                    multiplayer->display();
                     window->setVisible(true);
                 }
                 if (buttonCredits.hover(localPosition))
@@ -84,7 +92,7 @@ void Menu::afficher()
         window->clear();
         window->draw(background);
         buttonJoin.draw(window);
-        buttonCreate.draw(window);
+        buttonMultiplayer.draw(window);
         buttonCredits.draw(window);
         buttonOptions.draw(window);
         window->display();

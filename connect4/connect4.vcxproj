@@ -183,6 +183,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Connect4.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Multiplayer.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="WebSocket.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Multiplayer.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="WebSocket.h" />

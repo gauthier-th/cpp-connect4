@@ -5,9 +5,11 @@
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
 
-class Menu
+class Multiplayer
 {
 private:
 public:
-	void afficher();
+	void display();
+	void createGame();
+	void joinGame();
 };
