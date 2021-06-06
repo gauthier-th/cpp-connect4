@@ -4,10 +4,13 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
+#include "Config.h"
 
 class Menu
 {
 private:
+	Config config;
 public:
+	Menu();
 	void afficher();
 };

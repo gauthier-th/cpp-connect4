@@ -2,13 +2,13 @@
 #include "Options.h"
 #include "TextBox.h"
 #include "Button.h"
-#include "Config.h"
+
+Options::Options(Config _config): config(_config)
+{
+}
 
 void Options::display()
 {
-    Config config = Config();
-    config.load();
-
     sf::ContextSettings settings;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Options", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 

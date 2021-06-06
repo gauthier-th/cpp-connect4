@@ -5,6 +5,12 @@
 #include "Credits.h"
 #include "Options.h"
 #include "Multiplayer.h"
+#include "GameType.h"
+
+Menu::Menu(): config(Config())
+{
+    this->config.load();
+}
 
 void Menu::afficher()
 {
@@ -61,14 +67,14 @@ void Menu::afficher()
                 if (buttonJoin.hover(localPosition))
                 {
                     window->setVisible(false);
-                    Game* game = new Game();
+                    Game* game = new Game(GameType::LOCAL);
                     game->display();
                     window->setVisible(true);
                 }
                 if (buttonMultiplayer.hover(localPosition))
                 {
                     window->setVisible(false);
-                    Multiplayer* multiplayer = new Multiplayer();
+                    Multiplayer* multiplayer = new Multiplayer(this->config);
                     multiplayer->display();
                     window->setVisible(true);
                 }
@@ -82,7 +88,7 @@ void Menu::afficher()
                 if (buttonOptions.hover(localPosition))
                 {
                     window->setVisible(false);
-                    Options* options = new Options();
+                    Options* options = new Options(this->config);
                     options->display();
                     window->setVisible(true);
                 }

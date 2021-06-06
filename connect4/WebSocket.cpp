@@ -1,5 +1,8 @@
 #include "WebSocket.h"
 #include <ostream>
+#include "json.hpp"
+
+using nlohmann::json;
 
 // Resolver and socket require an io_context
 WebSocket::WebSocket(net::io_context& ioc) : resolver_(ioc), ws_(ioc) {}
@@ -24,8 +27,9 @@ void WebSocket::connect(char const* host, char const* port)
     );
 }
 // Start the asynchronous operation
-void WebSocket::connect(char const* host, char const* port, websocket_callback connectCallback)
+void WebSocket::connect(char const* host, char const* port, std::function<void()> connectCallback)
 {
+    //this->_connectCallback = connectCallback;
     this->_connectCallback = connectCallback;
     this->connect(host, port);
 }
@@ -111,8 +115,11 @@ void WebSocket::on_read(beast::error_code ec, std::size_t bytes_transferred)
     dataStream << beast::make_printable(this->buffer_.data());
     std::string data = dataStream.str();
 
-    if (this->_readCallback != nullptr)
-        this->_readCallback(data);
+    try {
+        if (this->_readCallback != nullptr)
+            this->_readCallback(json::parse(data));
+    }
+    catch (std::exception e) {}
 
     this->buffer_.clear();
 
@@ -156,7 +163,24 @@ void WebSocket::close()
 }
 
 
-void WebSocket::setReadCallback(read_callback readCallback)
+void WebSocket::setReadCallback(std::function<void(json)> readCallback)
 {
     this->_readCallback = readCallback;
+}
+
+
+void WebSocket::listGames()
+{
+    json payload = {
+        {"type", "list"}
+    };
+    this->write(payload.dump());
+}
+void WebSocket::createGame(std::string username)
+{
+    json payload = {
+        {"type", "create"},
+        {"username", username}
+    };
+    this->write(payload.dump());
 }

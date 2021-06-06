@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Button.h"
 
-Game::Game()
+Game::Game(GameType _gameType): gameType(_gameType)
 {
 }
 
@@ -31,7 +31,7 @@ void Game::display()
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
                 if (this->grid->quit(localPosition, endType) && endType != 0)
                     window->close();
-                else if (endType == 0) {
+                else if ((this->gameType == GameType::MULTIPLAYER && this->connect4->getPlayer() == 1) || (this->gameType != GameType::MULTIPLAYER && endType == 0)) {
                     int col = this->grid->clickedColumnlocalPosition(localPosition);
 
                     if (col >= 0 && col < Connect4::SIZE_X && !this->connect4->columnFilled(col))
@@ -56,12 +56,22 @@ void Game::display()
         window->clear();
         this->grid->draw();
         if (endType != 0) {
-            if (endType == 1)
-                this->grid->displayMessage("Player 1 won!", sf::Color(0x002AE0FF));
-            else if (endType == 2)
-                this->grid->displayMessage("Player 2 won!", sf::Color(0x002AE0FF));
-            else
-                this->grid->displayMessage("Equality!\nThe grid is full.", sf::Color(0x002AE0FF));
+            if (this->gameType == GameType::LOCAL) {
+                if (endType == 1)
+                    this->grid->displayMessage("Player 1 won!", sf::Color(0x002AE0FF));
+                else if (endType == 2)
+                    this->grid->displayMessage("Player 2 won!", sf::Color(0x002AE0FF));
+                else
+                    this->grid->displayMessage("Equality!\nThe grid is full.", sf::Color(0x002AE0FF));
+            }
+            else {
+                if (endType == 1)
+                    this->grid->displayMessage("You won!", sf::Color(0x002AE0FF));
+                else if (endType == 2)
+                    this->grid->displayMessage("You lost!", sf::Color(0x002AE0FF));
+                else
+                    this->grid->displayMessage("Equality!\nThe grid is full.", sf::Color(0x002AE0FF));
+            }
         }
         window->display();
     }
