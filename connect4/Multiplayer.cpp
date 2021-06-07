@@ -53,10 +53,13 @@ void Multiplayer::upadteList()
     this->texts.clear();
     if (this->serversList != nullptr)
     {
-        int size = 0;
+        float interline = 0;
+        float leftMargin = 0;
 
         for (int i = 0; i < this->serversList.size(); i++)
         {
+            if (i == 10) // Limit number of servers displayed per column
+                leftMargin = 250;
             std::string id = this->serversList[i]["id"];
             std::string username = this->serversList[i]["username"];
 
@@ -64,21 +67,19 @@ void Multiplayer::upadteList()
             server.setString(username);
             server.setFont(this->font);
             server.setCharacterSize(20);
-            server.setPosition(50, 100 + size);
+            server.setPosition(50 + leftMargin, 100 + interline);
 
             this->texts.push_back(server);
 
             Button* joinButton = new Button(this->font, "Join");
             joinButton->setDefaultBackgroundColor(sf::Color(0x52BE80FF));
             joinButton->setHoverBackgroundColor(sf::Color(0x27AE60FF));
-            joinButton->setPosition(sf::Vector2f(250, 100 + size));
+            joinButton->setPosition(sf::Vector2f(250 + leftMargin, 100 + interline));
             joinButton->setSize(sf::Vector2f(100.f, 25.f));
 
             this->buttons.push_back(joinButton);
 
-            size = size + 30;
-
-            // add if i > 20 -> 2 columns
+            interline = interline + 30;
         }
     }
 }
