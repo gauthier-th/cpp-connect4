@@ -50,4 +50,5 @@ public:
     void listGames();
     void createGame(std::string username);
     void joinGame(std::string gameId, std::string username);
+    void placeToken(std::string userId, int column);
 };

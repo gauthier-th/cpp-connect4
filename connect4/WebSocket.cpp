@@ -193,3 +193,12 @@ void WebSocket::joinGame(std::string gameId, std::string username)
     };
     this->write(payload.dump());
 }
+void WebSocket::placeToken(std::string userId, int column)
+{
+    json payload = {
+        {"type", "token"},
+        {"userId", userId},
+        {"column", column}
+    };
+    this->write(payload.dump());
+}

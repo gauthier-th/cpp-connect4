@@ -7,6 +7,7 @@
 #include <SFML/System.hpp>
 #include "Config.h"
 #include "Button.h"
+#include "Game.h"
 
 #include "json.hpp"
 
@@ -29,6 +30,11 @@ private:
 	sf::RenderWindow* window;
 	json serversList = nullptr;
 	bool gameCreated = false;
+	std::string gameId;
+	std::string userId;
+	bool youStart;
+	bool startGameWindow = false;
+	Game* game;
 	void websocket();
 	void upadteList();
 	void display();
@@ -37,5 +43,5 @@ public:
 	void start();
 	void createGame(std::string gameId, std::string userId);
 	void joinGame(std::string userId, bool youStart);
-	void start(bool youStart);
+	void startGame(bool youStart);
 };

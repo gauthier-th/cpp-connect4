@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include "Multiplayer.h"
-#include "Game.h"
 #include <thread>
 #include <functional>
 
@@ -30,14 +29,22 @@ void Multiplayer::websocket()
         }
         else if (payload["type"] == "create")
             this->createGame(payload["gameId"], payload["userId"]);
-        else if (payload["type"] == "join") {
+        else if (payload["type"] == "join")
             this->joinGame(payload["userId"], payload["youStart"]);
-            std::cout << payload.dump() << std::endl;
+        else if (payload["type"] == "start")
+            this->startGame(payload["youStart"]);
+        else if (payload["type"] == "token") {
+            std::cout << "RECEIVE TOKEN " << payload["column"] << std::endl;
+            this->game->tokenEvent(payload["column"]);
+        }
+        else if (payload["type"] == "end")
+        {
+            std::cout << "end youWin:" << payload["youWin"] << std::endl;
         }
         else
             std::cout << payload.dump() << std::endl;
     });
-    //auto qsd = std::bind(&Multiplayer::connected, this);
+
     this->ws->connect(this->config.getServerIp().c_str(), this->config.getServerPort().c_str(), [&]() {
         this->ws->listGames();
     });
@@ -141,6 +148,17 @@ void Multiplayer::display()
 
     while (this->window->isOpen())
     {
+        if (this->startGameWindow)
+        {
+            this->startGameWindow = false;
+            window->setVisible(false);
+            this->game = new Game(GameType::MULTIPLAYER, this->ws, this->userId, this->youStart);
+            this->game->display();
+            this->ws->close();
+            this->window->close();
+            return;
+        }
+
         sf::Event event;
         while (this->window->pollEvent(event))
         {
@@ -174,8 +192,10 @@ void Multiplayer::display()
                 if (reloadButton->hover(localPosition) && !this->gameCreated)
                     this->ws->listGames();
                 for (int i = 0; i < this->buttons.size(); i++) {
-                    if (this->buttons[i]->hover(localPosition))
+                    if (this->buttons[i]->hover(localPosition)) {
+                        this->gameId = this->serversList[i]["id"];
                         this->ws->joinGame(this->serversList[i]["id"], this->config.getUsername());
+                    }
                 }
             }
         }
@@ -224,17 +244,19 @@ void Multiplayer::display()
 void Multiplayer::createGame(std::string gameId, std::string userId)
 {
     this->gameCreated = true;
-    std::cout << "create game, gameId: " << gameId << " userId: " << userId << std::endl;
+    this->gameId = gameId;
+    this->userId = userId;
 }
 
 void Multiplayer::joinGame(std::string userId, bool youStart)
 {
-    std::cout << "join game, userId: " << userId << " youStart: " << youStart << std::endl;
-    //Game* game = new Game(GameType::MULTIPLAYER);
-    //game->display();
+    this->userId = userId;
+    this->youStart = youStart;
+    this->startGameWindow = true;
 }
 
-void Multiplayer::start(bool youStart)
+void Multiplayer::startGame(bool youStart)
 {
-    std::cout << "start game, youStart: " << youStart << std::endl;
+    this->youStart = youStart;
+    this->startGameWindow = true;
 }

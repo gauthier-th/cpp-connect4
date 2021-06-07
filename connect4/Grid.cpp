@@ -1,10 +1,17 @@
 #include <iostream>
 #include "Grid.h"
 
-Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4)
+Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4): window(_window), connect4(_connect4)
 {
-	this->window = _window;
-	this->connect4 = _connect4;
+	this->load();
+}
+Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4, bool _inverseColor): window(_window), connect4(_connect4), inverseColor(_inverseColor)
+{
+	this->load();
+}
+
+void Grid::load()
+{
 	if (!this->textureGrid.loadFromFile("resources/empty_token.png") || !this->textureYellowToken.loadFromFile("resources/yellow_token.png") || !this->textureRedToken.loadFromFile("resources/red_token.png"))
 	{
 		std::cout << "Unable to load texture file" << std::endl;
@@ -30,7 +37,7 @@ void Grid::draw()
 	if (this->hoverColumn >= 0 && this->hoverColumn < Connect4::SIZE_X && !this->connect4->columnFilled(this->hoverColumn))
 	{
 		sf::Sprite sprite;
-		if (this->connect4->getPlayer() == 1)
+		if (this->connect4->getPlayer() == (inverseColor ? 2 : 1))
 			sprite.setTexture(this->textureYellowToken);
 		else
 			sprite.setTexture(this->textureRedToken);
@@ -43,12 +50,12 @@ void Grid::draw()
 	{
 		for (int j = 0; j < Connect4::SIZE_Y; j++)
 		{
-			if (this->connect4->getGrid()[i][j] == 1)
+			if (this->connect4->getGrid()[i][j] == (inverseColor ? 2 : 1))
 			{
 				yellowSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
 				this->window->draw(yellowSprite);
 			}
-			else if (this->connect4->getGrid()[i][j] == 2)
+			else if (this->connect4->getGrid()[i][j] == (inverseColor ? 1 : 2))
 			{
 				redSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
 				this->window->draw(redSprite);

@@ -10,6 +10,10 @@ Connect4::Connect4() {
 	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 2);
 	this->player = dist(rng);
 }
+Connect4::Connect4(bool youStart) {
+	this->fillGrid();
+	this->player = youStart ? 1 : 2;
+}
 
 void Connect4::fillGrid()
 {

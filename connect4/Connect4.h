@@ -34,6 +34,7 @@ public:
 	static const int SIZE_X = P4_SIZE_X;
 	static const int SIZE_Y = P4_SIZE_Y;
 	Connect4();
+	Connect4(bool youStart);
 	int getPlayer();
 	int getToken(int x, int y);
 	int** getGrid();
