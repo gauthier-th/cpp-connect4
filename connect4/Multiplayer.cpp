@@ -38,7 +38,7 @@ void Multiplayer::websocket()
             std::cout << payload.dump() << std::endl;
     });
     //auto qsd = std::bind(&Multiplayer::connected, this);
-    this->ws->connect("localhost", "3000", [&]() {
+    this->ws->connect("test-games.gauthierth.fr", "3000", [&]() {
         this->ws->listGames();
     });
 
@@ -64,7 +64,7 @@ void Multiplayer::upadteList()
         {
             if (i == 15) // Limit number of servers displayed per column
             { 
-                leftMargin = 250;
+                leftMargin = 340;
                 interline = 0;
             }
             std::string id = this->serversList[i]["id"];
@@ -87,6 +87,8 @@ void Multiplayer::upadteList()
             this->buttons.push_back(joinButton);
 
             interline = interline + 30;
+            if (i == 30) // Limit number of servers
+                break;
         }
     }
 }
