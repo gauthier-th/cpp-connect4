@@ -40,7 +40,7 @@ void WebSocket::on_resolve(beast::error_code ec, tcp::resolver::results_type res
         return fail(ec, "resolve");
 
     // Set the timeout for the operation
-    beast::get_lowest_layer(this->ws_).expires_after(std::chrono::seconds(30));
+    beast::get_lowest_layer(this->ws_).expires_after(std::chrono::hours(2));
 
     // Make the connection on the IP address we get from a lookup
     beast::get_lowest_layer(this->ws_).async_connect(

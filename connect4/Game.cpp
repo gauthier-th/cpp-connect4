@@ -14,13 +14,14 @@ void Game::display()
 	this->window = new sf::RenderWindow(sf::VideoMode(735, 630), "Connect 4", sf::Style::None + sf::Style::Titlebar + sf::Style::Close);
     if (this->gameType == GameType::MULTIPLAYER)
     {
+        std::cout << "you start: " << this->youStart << std::endl;
         this->connect4 = new Connect4(this->youStart);
-        this->grid = new Grid(this->window, this->connect4, !this->youStart);
+        this->grid = new Grid(this->window, this->connect4, this->gameType, !this->youStart);
     }
     else
     {
         this->connect4 = new Connect4();
-        this->grid = new Grid(this->window, this->connect4);
+        this->grid = new Grid(this->window, this->connect4, this->gameType);
     }
 
     while (this->window->isOpen())
@@ -33,7 +34,8 @@ void Game::display()
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*this->window);
-                this->grid->hover(localPosition, this->endType);
+                if (this->gameType != GameType::MULTIPLAYER || this->connect4->getPlayer() == 1)
+                    this->grid->hover(localPosition, this->endType);
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
@@ -45,7 +47,11 @@ void Game::display()
                     int col = this->grid->clickedColumnlocalPosition(localPosition);
                     if (col >= 0 && col < Connect4::SIZE_X && !this->connect4->columnFilled(col))
                     {
-                        this->ws->placeToken(this->userId, col);
+                        if (this->gameType == GameType::MULTIPLAYER)
+                        {
+                            this->ws->placeToken(this->userId, col);
+                            this->grid->hideHover();
+                        }
                         this->placeToken(col);
                     }
                 }
@@ -83,11 +89,11 @@ void Game::placeToken(int col)
         bool win = this->connect4->addToken(col);
 
         if (win) {
-            endType = this->connect4->getPlayer();
+            this->endType = this->connect4->getPlayer();
             this->grid->hideHover();
         }
         else if (this->connect4->gridFilled()) {
-            endType = 3;
+            this->endType = 3;
             this->grid->hideHover();
         }
 

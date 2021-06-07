@@ -1,11 +1,11 @@
 #include <iostream>
 #include "Grid.h"
 
-Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4): window(_window), connect4(_connect4)
+Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4, GameType _gameType): window(_window), connect4(_connect4), gameType(_gameType)
 {
 	this->load();
 }
-Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4, bool _inverseColor): window(_window), connect4(_connect4), inverseColor(_inverseColor)
+Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4, GameType _gameType, bool _inverseColor): window(_window), connect4(_connect4), gameType(_gameType), inverseColor(_inverseColor)
 {
 	this->load();
 }

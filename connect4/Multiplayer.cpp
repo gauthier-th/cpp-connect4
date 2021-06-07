@@ -49,9 +49,12 @@ void Multiplayer::websocket()
         this->ws->listGames();
     });
 
-    // Run the I/O service. The call will return when
-    // the socket is closed.
-    ioc.run();
+    try {
+        // Run the I/O service. The call will return when
+        // the socket is closed.
+        ioc.run();
+    }
+    catch (...) {}
 }
 
 void Multiplayer::upadteList()
