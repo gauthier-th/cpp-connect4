@@ -16,9 +16,10 @@ void Credits::display()
     background.setFillColor(sf::Color(0x0089E3FF));
 
     sf::Text text = sf::Text();
-    text.setString("Created by Gauthier & Tom\n\n2021");
+    text.setString("Connect 4 is a study project at ESIREM, created by Gauthier and Tom.\n\nLast update: 06/10/2021");
     text.setFont(font);
     text.setCharacterSize(20);
+
     sf::FloatRect textRect = text.getLocalBounds();
     text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     text.setPosition(sf::Vector2f(650/2, 650/2));
