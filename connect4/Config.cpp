@@ -20,6 +20,11 @@ void Config::setServerIp(std::string _serverIp)
 	this->serverIp = _serverIp;
 }
 
+void Config::setServerPort(std::string _serverPort)
+{
+	this->serverPort = _serverPort;
+}
+
 void Config::setUsername(std::string _username)
 {
 	this->username = _username;
@@ -28,6 +33,11 @@ void Config::setUsername(std::string _username)
 std::string Config::getServerIp()
 {
 	return this->serverIp;
+}
+
+std::string Config::getServerPort()
+{
+	return this->serverPort;
 }
 
 std::string Config::getUsername()
@@ -45,6 +55,8 @@ void Config::load()
 			this->serverIp = line.substr(9);
 		if (line.rfind("username=", 0) == 0)
 			this->username = line.substr(9);
+		if (line.rfind("port=", 0) == 0)
+			this->serverPort = line.substr(5);
 	}
 }
 
@@ -54,6 +66,7 @@ void Config::save()
 
 	config << "serverip=" << this->serverIp << std::endl;
 	config << "username=" << this->username << std::endl;
+	config << "port=" << this->serverPort << std::endl;
 
 	config.close();
 }

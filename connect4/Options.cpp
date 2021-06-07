@@ -45,10 +45,24 @@ void Options::display()
     textboxIp->setCharacterSize(24);
     textboxIp->setTextContent(config.getServerIp());
 
+    sf::Text textPort = sf::Text();
+    textPort.setString("Port");
+    textPort.setFont(font);
+    textPort.setCharacterSize(24);
+    sf::FloatRect textRectPort = textPort.getLocalBounds();
+    textPort.setOrigin(textRectPort.left + textRectPort.width / 2.0f, textRectPort.top + textRectPort.height / 2.0f);
+    textPort.setPosition(sf::Vector2f(650 / 2, 350));
+
+    TextBox* textboxPort = new TextBox(font);
+    textboxPort->setPosition(sf::Vector2f(190.f, 380.f));
+    textboxPort->setCharacterSize(24);
+    textboxPort->setTextContent(config.getServerPort());
+
     Button* saveButton = new Button(font, "Save");
     saveButton->setDefaultBackgroundColor(sf::Color(26, 196, 77));
     saveButton->setHoverBackgroundColor(sf::Color(59, 235, 111));
-    saveButton->setPosition(sf::Vector2f(650 / 2 - 210 / 2, 350.f));
+    saveButton->setPosition(sf::Vector2f(0, 650 - 30));
+    saveButton->setSize(sf::Vector2f(150.f, 30.f));
 
     Button* quitButton = new Button(font, "Back");
     quitButton->setSize(sf::Vector2f(150.f, 30.f));
@@ -66,6 +80,7 @@ void Options::display()
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
                 textboxUsername->hover(localPosition, window);
                 textboxIp->hover(localPosition, window);
+                textboxPort->hover(localPosition, window);
                 quitButton->hover(localPosition);
                 saveButton->hover(localPosition);
             }
@@ -80,9 +95,14 @@ void Options::display()
                     textboxIp->focus();
                 else
                     textboxIp->blur();
+                if (textboxPort->hover(localPosition, window))
+                    textboxPort->focus();
+                else
+                    textboxPort->blur();
                 if (saveButton->hover(localPosition)) {
                     config.setUsername(textboxUsername->getTextContent());
                     config.setServerIp(textboxIp->getTextContent());
+                    config.setServerPort(textboxPort->getTextContent());
                     config.save();
                     window->close();
                 }
@@ -93,6 +113,7 @@ void Options::display()
             {
                 textboxUsername->text(event.text.unicode);
                 textboxIp->text(event.text.unicode);
+                textboxPort->text(event.text.unicode);
             }
         }
 
@@ -100,8 +121,10 @@ void Options::display()
         window->draw(background);
         window->draw(textUsername);
         window->draw(textIp);
+        window->draw(textPort);
         textboxUsername->draw(window);
         textboxIp->draw(window);
+        textboxPort->draw(window);
         saveButton->draw(window);
         quitButton->draw(window);
         window->display();
