@@ -20,10 +20,6 @@ void Credits::display()
     text.setFont(font);
     text.setCharacterSize(20);
 
-    sf::FloatRect textRect = text.getLocalBounds();
-    text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-    text.setPosition(sf::Vector2f(650/2, 650/2));
-
     Button* quitButton = new Button(font, "Back");
     quitButton->setSize(sf::Vector2f(150.f, 30.f));
     quitButton->setPosition(sf::Vector2f(650 - 150, 650 - 30));
