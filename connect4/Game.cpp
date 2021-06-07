@@ -34,7 +34,7 @@ void Game::display()
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*this->window);
-                if (this->gameType != GameType::MULTIPLAYER || this->connect4->getPlayer() == 1)
+                if (this->gameType != GameType::MULTIPLAYER || this->connect4->getPlayer() == 1 || endType != 0)
                     this->grid->hover(localPosition, this->endType);
             }
             if (event.type == sf::Event::MouseButtonPressed)

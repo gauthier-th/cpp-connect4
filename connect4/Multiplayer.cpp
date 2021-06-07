@@ -54,7 +54,10 @@ void Multiplayer::websocket()
         // the socket is closed.
         ioc.run();
     }
-    catch (...) {}
+    catch (...)
+    {
+        std::cerr << "Unexpected error" << std::endl;
+    }
 }
 
 void Multiplayer::upadteList()
