@@ -38,7 +38,7 @@ void Multiplayer::websocket()
             std::cout << payload.dump() << std::endl;
     });
     //auto qsd = std::bind(&Multiplayer::connected, this);
-    this->ws->connect("test-games.gauthierth.fr", "3000", [&]() {
+    this->ws->connect(this->config.getServerIp().c_str(), this->config.getServerPort().c_str(), [&]() {
         this->ws->listGames();
     });
 
