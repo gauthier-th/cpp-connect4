@@ -49,4 +49,5 @@ public:
 
     void listGames();
     void createGame(std::string username);
+    void joinGame(std::string gameId, std::string username);
 };

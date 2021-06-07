@@ -26,12 +26,16 @@ private:
 	std::vector<sf::Text> texts;
 	Config config;
 	std::shared_ptr<WebSocket> ws;
+	sf::RenderWindow* window;
 	json serversList = nullptr;
+	bool gameCreated = false;
 	void websocket();
 	void upadteList();
+	void display();
 public:
 	Multiplayer(Config _config);
-	void display();
-	void createGame();
-	void joinGame(std::string id, std::string username);
+	void start();
+	void createGame(std::string gameId, std::string userId);
+	void joinGame(std::string userId, bool youStart);
+	void start(bool youStart);
 };

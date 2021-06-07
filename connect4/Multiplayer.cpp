@@ -7,6 +7,10 @@
 
 Multiplayer::Multiplayer(Config _config): config(_config)
 {
+}
+
+void Multiplayer::start()
+{
     std::thread t1(&Multiplayer::websocket, this);
     std::thread t2(&Multiplayer::display, this);
     t1.join();
@@ -24,6 +28,14 @@ void Multiplayer::websocket()
             this->serversList = payload["games"];
             this->upadteList();
         }
+        else if (payload["type"] == "create")
+            this->createGame(payload["gameId"], payload["userId"]);
+        else if (payload["type"] == "join") {
+            this->joinGame(payload["userId"], payload["youStart"]);
+            std::cout << payload.dump() << std::endl;
+        }
+        else
+            std::cout << payload.dump() << std::endl;
     });
     //auto qsd = std::bind(&Multiplayer::connected, this);
     this->ws->connect("localhost", "3000", [&]() {
@@ -37,6 +49,8 @@ void Multiplayer::websocket()
 
 void Multiplayer::upadteList()
 {
+    this->buttons.clear();
+    this->texts.clear();
     if (this->serversList != nullptr)
     {
         int size = 0;
@@ -73,7 +87,7 @@ void Multiplayer::display()
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Multiplayer", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
+    this->window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Multiplayer", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 
     if (!this->font.loadFromFile("resources/Lato-Regular.ttf"))
         std::cout << "Unable to load font file" << std::endl;
@@ -109,22 +123,29 @@ void Multiplayer::display()
     createButton->setDefaultBackgroundColor(sf::Color(0x52BE80FF));
     createButton->setHoverBackgroundColor(sf::Color(0x27AE60FF));
 
-    while (window->isOpen())
+    Button* reloadButton = new Button(this->font, "Reload");
+    reloadButton->setSize(sf::Vector2f(150.f, 30.f));
+    reloadButton->setPosition(sf::Vector2f(650/2 - 150/2, 650 - 30));
+    reloadButton->setDefaultBackgroundColor(sf::Color(0x52BE80FF));
+    reloadButton->setHoverBackgroundColor(sf::Color(0x27AE60FF));
+
+    while (this->window->isOpen())
     {
         sf::Event event;
-        while (window->pollEvent(event))
+        while (this->window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
             {
                 this->ws->close();
-                window->close();
+                this->window->close();
             }
 
             if (event.type == sf::Event::MouseMoved)
             {
-                sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
+                sf::Vector2i localPosition = sf::Mouse::getPosition(*this->window);
                 quitButton->hover(localPosition);
                 createButton->hover(localPosition);
+                reloadButton->hover(localPosition);
                 for (int i = 0; i < this->buttons.size(); i++)
                 {
                     this->buttons[i]->hover(localPosition);
@@ -132,47 +153,78 @@ void Multiplayer::display()
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                sf::Vector2i localPosition = sf::Mouse::getPosition(*window);
+                sf::Vector2i localPosition = sf::Mouse::getPosition(*this->window);
                 if (quitButton->hover(localPosition))
                 {
                     this->ws->close();
-                    window->close();
+                    this->window->close();
                 }
-                if (createButton->hover(localPosition))
-                    this->createGame();
+                if (createButton->hover(localPosition) && !this->gameCreated)
+                    this->ws->createGame(this->config.getUsername());
+                if (reloadButton->hover(localPosition) && !this->gameCreated)
+                    this->ws->listGames();
                 for (int i = 0; i < this->buttons.size(); i++) {
-                    if (this->buttons[i]->hover(localPosition)) {
-                        window->setVisible(false);
-                        this->joinGame(this->serversList[i]["id"], this->config.getUsername());
-                        window->setVisible(true);
-                    }
+                    if (this->buttons[i]->hover(localPosition))
+                        this->ws->joinGame(this->serversList[i]["id"], this->config.getUsername());
                 }
             }
         }
 
-        window->clear();
+        this->window->clear();
 
-        window->draw(background);
+        this->window->draw(background);
 
         for (int i = 0; i < this->buttons.size(); i++) {
-            window->draw(this->texts[i]);
-            this->buttons[i]->draw(window);
+            this->window->draw(this->texts[i]);
+            this->buttons[i]->draw(this->window);
         }
-        
-        window->draw(text);
-        quitButton->draw(window);
-        createButton->draw(window);
-        window->display();
+        if (this->serversList == nullptr || this->buttons.size() == 0 || this->gameCreated)
+        {
+            sf::Text loading;
+            if (this->serversList == nullptr)
+            {
+                loading.setCharacterSize(30);
+                loading.setString("Loading...");
+            }
+            else
+            {
+                loading.setCharacterSize(25);
+                if (this->gameCreated)
+                    loading.setString("Waiting for another player...");
+                else
+                    loading.setString("No available room for the moment.");
+            }
+            loading.setFont(this->font);
+            loading.setPosition(650/2 - loading.getLocalBounds().width/2, 300);
+            this->window->draw(loading);
+        }
+        else
+            this->window->draw(text);
+
+        quitButton->draw(this->window);
+        if (!this->gameCreated)
+        {
+            createButton->draw(this->window);
+            reloadButton->draw(this->window);
+        }
+        this->window->display();
     }
 }
 
-void Multiplayer::createGame()
+void Multiplayer::createGame(std::string gameId, std::string userId)
 {
-
+    this->gameCreated = true;
+    std::cout << "create game, gameId: " << gameId << " userId: " << userId << std::endl;
 }
 
-void Multiplayer::joinGame(std::string id, std::string username)
+void Multiplayer::joinGame(std::string userId, bool youStart)
 {
-    Game* game = new Game(GameType::MULTIPLAYER);
-    game->display();
+    std::cout << "join game, userId: " << userId << " youStart: " << youStart << std::endl;
+    //Game* game = new Game(GameType::MULTIPLAYER);
+    //game->display();
+}
+
+void Multiplayer::start(bool youStart)
+{
+    std::cout << "start game, youStart: " << youStart << std::endl;
 }

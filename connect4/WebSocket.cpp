@@ -184,3 +184,12 @@ void WebSocket::createGame(std::string username)
     };
     this->write(payload.dump());
 }
+void WebSocket::joinGame(std::string gameId, std::string username)
+{
+    json payload = {
+        {"type", "join"},
+        {"gameId", gameId},
+        {"username", username}
+    };
+    this->write(payload.dump());
+}

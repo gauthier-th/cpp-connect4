@@ -75,7 +75,7 @@ void Menu::afficher()
                 {
                     window->setVisible(false);
                     Multiplayer* multiplayer = new Multiplayer(this->config);
-                    multiplayer->display();
+                    multiplayer->start();
                     window->setVisible(true);
                 }
                 if (buttonCredits.hover(localPosition))
