@@ -1,5 +1,5 @@
-#include <iostream>
 #include "Grid.h"
+#include <iostream>
 
 Grid::Grid(sf::RenderWindow* _window, Connect4* _connect4, GameType _gameType): window(_window), connect4(_connect4), gameType(_gameType)
 {
@@ -22,17 +22,32 @@ void Grid::load()
 		std::cout << "Unable to load font file" << std::endl;
 	}
 
+	this->backSprite.setTexture(this->textureGrid);
+	this->yellowSprite.setTexture(this->textureYellowToken);
+	this->redSprite.setTexture(this->textureRedToken);
+
 	this->quitButton = new Button(this->font, "Back");
 }
 
 void Grid::draw()
 {
-	sf::Sprite backSprite;
-	backSprite.setTexture(this->textureGrid);
-	sf::Sprite yellowSprite;
-	yellowSprite.setTexture(this->textureYellowToken);
-	sf::Sprite redSprite;
-	redSprite.setTexture(this->textureRedToken);
+	for (int i = 0; i < this->animations.size(); i++)
+	{
+		auto tupleAnim = this->animations[i];
+		int col = std::get<0>(tupleAnim);
+		int token = std::get<1>(tupleAnim);
+		int pos = std::get<2>(tupleAnim)->state();
+		if (token == (this->inverseColor ? 2 : 1))
+		{
+			this->yellowSprite.setPosition(sf::Vector2f(105 * col, pos));
+			this->window->draw(yellowSprite);
+		}
+		else if (token == (this->inverseColor ? 1 : 2))
+		{
+			this->redSprite.setPosition(sf::Vector2f(105 * col, pos));
+			this->window->draw(redSprite);
+		}
+	}
 
 	if (this->hoverColumn >= 0 && this->hoverColumn < Connect4::SIZE_X && !this->connect4->columnFilled(this->hoverColumn))
 	{
@@ -46,23 +61,37 @@ void Grid::draw()
 		this->window->draw(sprite);
 	}
 
+	int currentAnimations[Connect4::SIZE_X];
+	std::fill(currentAnimations, currentAnimations + Connect4::SIZE_X, 0);
+	for (int i = 0; i < this->animations.size(); i++)
+	{
+		int col = std::get<0>(this->animations[i]);
+		currentAnimations[col]++;
+	}
+
 	for (int i = 0; i < Connect4::SIZE_X; i++)
 	{
-		for (int j = 0; j < Connect4::SIZE_Y; j++)
+		for (int j = Connect4::SIZE_Y - 1; j >= 0; j--)
+		//for (int j = 0; j < Connect4::SIZE_Y; j++)
 		{
-			if (this->connect4->getGrid()[i][j] == (inverseColor ? 2 : 1))
+			if (currentAnimations[i] > 0 && this->connect4->getGrid()[i][j] != 0)
+				currentAnimations[i]--;
+			else
 			{
-				yellowSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
-				this->window->draw(yellowSprite);
-			}
-			else if (this->connect4->getGrid()[i][j] == (inverseColor ? 1 : 2))
-			{
-				redSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
-				this->window->draw(redSprite);
+				if (this->connect4->getGrid()[i][j] == (this->inverseColor ? 2 : 1))
+				{
+					this->yellowSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
+					this->window->draw(yellowSprite);
+				}
+				else if (this->connect4->getGrid()[i][j] == (this->inverseColor ? 1 : 2))
+				{
+					this->redSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
+					this->window->draw(redSprite);
+				}
 			}
 
-			backSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
-			this->window->draw(backSprite);
+			this->backSprite.setPosition(sf::Vector2f(105 * i, 105 * (Connect4::SIZE_Y - 1 - j)));
+			this->window->draw(this->backSprite);
 		}
 	}
 }
@@ -85,6 +114,28 @@ int Grid::clickedColumnlocalPosition(sf::Vector2i localPosition)
 {
 	int col = (localPosition.x - localPosition.x % 105) / 105;
 	return col;
+}
+
+void Grid::addToken(int col)
+{
+	int tokenCount = this->connect4->columnTokenCount(col);
+	if (tokenCount < Connect4::SIZE_Y - 1)
+	{
+		Animation* anim = new Animation(0, 105 * (Connect4::SIZE_Y - tokenCount), 600, [&, col]() {
+			for (int i = 0; i < this->animations.size(); i++)
+			{
+				std::cout << std::get<0>(this->animations[i]) << " : " << col << "" << std::endl;
+				if (std::get<0>(this->animations[i]) == col)
+				{
+					std::cout << "remove token " << col << std::endl;
+					this->animations.erase(this->animations.begin() + i);
+					break;
+				}
+			}
+			});
+		anim->start();
+		this->animations.push_back(std::make_tuple(col, this->connect4->getPlayer(), anim));
+	}
 }
 
 

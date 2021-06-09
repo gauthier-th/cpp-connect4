@@ -36,7 +36,7 @@ private:
 	bool startGameWindow = false;
 	Game* game;
 	void websocket();
-	void upadteList();
+	void updateList();
 	void display();
 public:
 	Multiplayer(Config _config);

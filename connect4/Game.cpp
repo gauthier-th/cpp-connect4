@@ -30,7 +30,10 @@ void Game::display()
         while (this->window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
+            {
+                this->ws->close();
                 this->window->close();
+            }
             if (event.type == sf::Event::MouseMoved)
             {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(*this->window);
@@ -74,8 +77,10 @@ void Game::display()
                     this->grid->displayMessage("You won!", sf::Color(0x002AE0FF));
                 else if (this->endType == 2)
                     this->grid->displayMessage("You lost!", sf::Color(0x002AE0FF));
-                else
+                else if (this->endType == 3)
                     this->grid->displayMessage("Equality!\nThe grid is full.", sf::Color(0x002AE0FF));
+                else
+                    this->grid->displayMessage("Other player left.", sf::Color(0x002AE0FF));
             }
         }
         this->window->display();
@@ -96,6 +101,8 @@ void Game::placeToken(int col)
             this->endType = 3;
             this->grid->hideHover();
         }
+        else
+            this->grid->addToken(col);
 
         this->connect4->next();
     }
@@ -104,4 +111,9 @@ void Game::placeToken(int col)
 void Game::tokenEvent(int column)
 {
     this->placeToken(column);
+}
+
+void Game::end()
+{
+    this->endType = 4;
 }

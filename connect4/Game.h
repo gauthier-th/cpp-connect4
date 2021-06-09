@@ -23,4 +23,5 @@ public:
 	Game(GameType _gameType, std::shared_ptr<WebSocket> _ws, std::string _userId, bool youStart);
 	void display();
 	void tokenEvent(int col);
+	void end();
 };

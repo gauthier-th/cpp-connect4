@@ -153,13 +153,16 @@ void WebSocket::write(std::string text)
 
 void WebSocket::close()
 {
-    // Close the WebSocket connection
-    this->ws_.async_close(websocket::close_code::normal,
-        beast::bind_front_handler(
-            &WebSocket::on_close,
-            shared_from_this()
-        )
-    );
+    try {
+        // Close the WebSocket connection
+        this->ws_.async_close(websocket::close_code::normal,
+            beast::bind_front_handler(
+                &WebSocket::on_close,
+                shared_from_this()
+            )
+        );
+    }
+    catch (std::exception const& e) {}
 }
 
 

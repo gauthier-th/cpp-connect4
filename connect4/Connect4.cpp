@@ -71,6 +71,19 @@ bool Connect4::columnFilled(int column)
 {
 	return this->grid[column][P4_SIZE_Y - 1] != 0;
 }
+int Connect4::columnTokenCount(int column)
+{
+	int tokenCount = 0;
+	for (int i = 0; i < P4_SIZE_Y - 1; i++)
+	{
+		if (this->grid[column][i] != 0)
+		{
+			tokenCount++;
+		}
+	}
+	std::cout << "-->" << tokenCount << std::endl;
+	return tokenCount;
+}
 bool Connect4::gridFilled()
 {
 	for (int i = 0; i < P4_SIZE_X; i++) {

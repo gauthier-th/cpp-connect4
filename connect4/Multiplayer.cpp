@@ -10,6 +10,8 @@ Multiplayer::Multiplayer(Config _config): config(_config)
 
 void Multiplayer::start()
 {
+    if (!this->font.loadFromFile("resources/Lato-Regular.ttf"))
+        std::cout << "Unable to load font file" << std::endl;
     std::thread t1(&Multiplayer::websocket, this);
     std::thread t2(&Multiplayer::display, this);
     t1.join();
@@ -25,7 +27,7 @@ void Multiplayer::websocket()
     this->ws->setReadCallback([&](json payload) {
         if (payload["type"] == "list") {
             this->serversList = payload["games"];
-            this->upadteList();
+            this->updateList();
         }
         else if (payload["type"] == "create")
             this->createGame(payload["gameId"], payload["userId"]);
@@ -40,6 +42,7 @@ void Multiplayer::websocket()
         else if (payload["type"] == "end")
         {
             std::cout << "end youWin:" << payload["youWin"] << std::endl;
+            this->game->end();
         }
         else
             std::cout << payload.dump() << std::endl;
@@ -60,7 +63,7 @@ void Multiplayer::websocket()
     }
 }
 
-void Multiplayer::upadteList()
+void Multiplayer::updateList()
 {
     this->buttons.clear();
     this->texts.clear();
@@ -111,9 +114,6 @@ void Multiplayer::display()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     this->window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Multiplayer", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
-
-    if (!this->font.loadFromFile("resources/Lato-Regular.ttf"))
-        std::cout << "Unable to load font file" << std::endl;
 
     sf::RectangleShape background(sf::Vector2f(650.f, 650.f));
     background.setFillColor(sf::Color(0x0089E3FF));

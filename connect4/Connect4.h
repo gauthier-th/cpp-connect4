@@ -39,6 +39,7 @@ public:
 	int getToken(int x, int y);
 	int** getGrid();
 	bool columnFilled(int column);
+	int columnTokenCount(int column);
 	bool gridFilled();
 	void showGrid();
 	bool addToken(int column);
