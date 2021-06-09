@@ -9,6 +9,7 @@ Options::Options(Config _config): config(_config)
 
 void Options::display()
 {
+    this->config.load();
     sf::ContextSettings settings;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(650, 650), "Connect 4 - Options", sf::Style::None + sf::Style::Titlebar + sf::Style::Close, settings);
 

@@ -6,6 +6,7 @@
 
 Multiplayer::Multiplayer(Config _config): config(_config)
 {
+    this->config.load();
 }
 
 void Multiplayer::start()

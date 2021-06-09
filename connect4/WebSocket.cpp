@@ -162,7 +162,7 @@ void WebSocket::close()
             )
         );
     }
-    catch (std::exception const& e) {}
+    catch (boost::system::system_error const& se) {}
 }
 
 
