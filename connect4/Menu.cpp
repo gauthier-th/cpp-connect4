@@ -21,7 +21,7 @@ void Menu::afficher()
     sf::Cursor defaultCursor;
     sf::Cursor handCursor;
     if (!defaultCursor.loadFromSystem(sf::Cursor::Arrow) || !handCursor.loadFromSystem(sf::Cursor::Hand))
-        std::cout << "Unable to load cursor." << std::endl;
+        std::cout << "Unable to load cursor" << std::endl;
 
     sf::Font font;
     if (!font.loadFromFile("resources/Lato-Regular.ttf"))

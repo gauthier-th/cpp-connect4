@@ -136,6 +136,8 @@ void Grid::addToken(int col)
 		anim->start();
 		this->animations.push_back(std::make_tuple(col, this->connect4->getPlayer(), anim));
 	}
+
+	audio.playClickSound(90.f);
 }
 
 

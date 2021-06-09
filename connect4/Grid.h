@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "GameType.h"
 #include "Animation.h"
+#include "Audio.h"
 
 class Grid
 {
@@ -25,6 +26,7 @@ private:
 	sf::Sprite redSprite;
 	bool inverseColor = false;
 	std::vector<std::tuple<int, int, Animation*>> animations;
+	Audio audio;
 public:
 	Grid(sf::RenderWindow* window, Connect4* connect4, GameType gameType);
 	Grid(sf::RenderWindow* window, Connect4* connect4, GameType gameType, bool _inverseColor);
