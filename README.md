@@ -1,5 +1,7 @@
 # C++ Connect4
 
+This is the client of the C++ Connect4 project. The server is [here](https://github.com/gauthier-th/cpp-connect4-server).
+
 ## Installation
 
 This project is build with Visual C++ 2019 (MSVC++ 14.2).
