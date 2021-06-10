@@ -81,7 +81,6 @@ int Connect4::columnTokenCount(int column)
 			tokenCount++;
 		}
 	}
-	std::cout << "-->" << tokenCount << std::endl;
 	return tokenCount;
 }
 bool Connect4::gridFilled()
@@ -91,29 +90,6 @@ bool Connect4::gridFilled()
 			return false;
 	}
 	return true;
-}
-void Connect4::showGrid()
-{
-	for (int j = 1; j < P4_SIZE_X * 4 + 2; j++) {
-		std::cout << "-";
-	}
-	std::cout << std::endl;
-	for (int j = P4_SIZE_Y - 1; j >= 0; j--) {
-		std::cout << "|";
-		for (int i = 0; i < P4_SIZE_X; i++) {
-			char token = ' ';
-			if (this->grid[i][j] == 1)
-				token = 'X';
-			else if (this->grid[i][j] == 2)
-				token = 'O';
-			std::cout << " " << token << " |";
-		}
-		std::cout << std::endl;
-		for (int j = 1; j < P4_SIZE_X * 4 + 2; j++) {
-			std::cout << "-";
-		}
-		std::cout << std::endl;
-	}
 }
 bool Connect4::addToken(int column)
 {

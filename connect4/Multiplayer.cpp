@@ -36,15 +36,10 @@ void Multiplayer::websocket()
             this->joinGame(payload["userId"], payload["youStart"]);
         else if (payload["type"] == "start")
             this->startGame(payload["youStart"]);
-        else if (payload["type"] == "token") {
-            std::cout << "RECEIVE TOKEN " << payload["column"] << std::endl;
+        else if (payload["type"] == "token")
             this->game->tokenEvent(payload["column"]);
-        }
         else if (payload["type"] == "end")
-        {
-            std::cout << "end youWin:" << payload["youWin"] << std::endl;
             this->game->end();
-        }
         else
             std::cout << payload.dump() << std::endl;
     });

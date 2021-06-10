@@ -124,10 +124,8 @@ void Grid::addToken(int col)
 		Animation* anim = new Animation(0, 105 * (Connect4::SIZE_Y - tokenCount), 600, [&, col]() {
 			for (int i = 0; i < this->animations.size(); i++)
 			{
-				std::cout << std::get<0>(this->animations[i]) << " : " << col << "" << std::endl;
 				if (std::get<0>(this->animations[i]) == col)
 				{
-					std::cout << "remove token " << col << std::endl;
 					this->animations.erase(this->animations.begin() + i);
 					break;
 				}

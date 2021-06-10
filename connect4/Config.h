@@ -4,9 +4,9 @@
 class Config
 {
 private:
-	std::string serverIp = "play.gauthierth.fr";
+	std::string serverIp = "games.gauthierth.fr";
 	std::string serverPort = "3000";
-	std::string username = "Jean Peplu";
+	std::string username = "Username";
 	std::string filename = "connect4.conf";
 public:
 	Config();

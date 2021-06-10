@@ -14,7 +14,6 @@ void Game::display()
 	this->window = new sf::RenderWindow(sf::VideoMode(735, 630), "Connect 4", sf::Style::None + sf::Style::Titlebar + sf::Style::Close);
     if (this->gameType == GameType::MULTIPLAYER)
     {
-        std::cout << "you start: " << this->youStart << std::endl;
         this->connect4 = new Connect4(this->youStart);
         this->grid = new Grid(this->window, this->connect4, this->gameType, !this->youStart);
     }
